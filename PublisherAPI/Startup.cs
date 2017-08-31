@@ -16,11 +16,16 @@ namespace PublisherAPI
     {
         public IConfiguration Configuration { get; set; }
 
-        public Startup()
+        public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
 
             Configuration = builder.Build();
         }
@@ -40,10 +45,12 @@ namespace PublisherAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            var message = Configuration["Message"];
+            
 
             app.Run(async (context) =>
             {
+                
+                var message = Configuration["Message"];
                 await context.Response.WriteAsync(message);
             });
         }
