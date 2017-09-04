@@ -17,8 +17,8 @@ namespace PublisherWebAPI.Data
         {
             Publishers = new List<PublisherDTO>
             {
-                new PublisherDTO {  Id = 1, Established = 1921, Name = "Publishing House 1" },
-                new PublisherDTO {  Id = 2, Established = 1888, Name = "Publishing House 2" }
+                new PublisherDTO { Id = 1, Established = 1921, Name = "Publishing House 1" },
+                new PublisherDTO { Id = 2, Established = 1888, Name = "Publishing House 2" }
             };
 
             Books = new List<BookDTO>
