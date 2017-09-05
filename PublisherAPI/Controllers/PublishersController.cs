@@ -79,8 +79,8 @@ namespace PublisherWebAPI.Controllers
             if (publisher == null) return BadRequest();
             var publisherToUpdate = _rep.GetPublisher(id);
             if (publisherToUpdate == null) return NotFound();
-
-            var publisherPatch = new PublisherUpdateDTO
+            
+            var publisherPatch = new PublisherUpdateDTO()
             {
                 Name = publisherToUpdate.Name,
                 Established = publisherToUpdate.Established
@@ -94,7 +94,7 @@ namespace PublisherWebAPI.Controllers
                     "The first publishing house was founded in 1534.");
             }
             // Unsure why the ModelState is checked again?
-            //if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             _rep.UpdatePublisher(id, publisherPatch);
             _rep.Save();
             return NoContent();
