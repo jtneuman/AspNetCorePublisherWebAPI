@@ -35,9 +35,22 @@ namespace PublisherWebAPI.Services
             return MockData.Current.Publishers;
         }
 
+        public bool PublisherExists(int publisherId)
+        {
+            return MockData.Current.Publishers.Count(p =>
+                p.Id.Equals(publisherId)).Equals(1);
+        }
+
         public bool Save()
         {
             return true;
+        }
+
+        public void UpdatePublisher(int id, PublisherUpdateDTO publisher)
+        {
+            var publisherToUpdate = GetPublisher(id);
+            publisherToUpdate.Name = publisher.Name;
+            publisherToUpdate.Established = publisher.Established;
         }
     }
 }
