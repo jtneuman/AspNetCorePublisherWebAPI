@@ -9,6 +9,13 @@ namespace PublisherWebAPI.Services
 {
     public class BookstoreMockRepository : IBookstoreRepository
     {
+        public void AddBook(BookDTO book)
+        {
+            var bookId = MockData.Current.Books.Max(m => m.Id) + 1;
+            book.Id = bookId;
+            MockData.Current.Books.Add(book);
+        }
+
         public void AddPublisher(PublisherDTO publisher)
         {
             // For Demo purposes only: Get next id

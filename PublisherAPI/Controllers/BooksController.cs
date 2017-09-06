@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PublisherWebAPI.Services;
+using PublisherWebAPI.Models;
 
 namespace PublisherWebAPI.Controllers
 {
@@ -32,6 +33,31 @@ namespace PublisherWebAPI.Controllers
             if (book == null) return NotFound();
 
             return Ok(book);
+        }
+
+        [HttpPost("{publisherId}/books")]
+        public IActionResult Post(int publisherId, [FromBody]BookCreateDTO book)
+        {
+            if (book == null) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var publisherExists = _rep.PublisherExists(publisherId);
+            if (!publisherExists) return NotFound();
+
+            var bookToAdd = new BookDTO
+            {
+                PublisherId = publisherId,
+                Title = book.Title
+            };
+
+            _rep.AddBook(bookToAdd);
+            _rep.Save();
+
+            return CreatedAtRoute("GetBook", new
+            {
+                publisherId = publisherId,
+                id = bookToAdd.Id
+            }, bookToAdd);
         }
     }
 }
