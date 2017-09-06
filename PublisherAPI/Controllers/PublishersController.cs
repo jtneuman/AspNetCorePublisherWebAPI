@@ -99,6 +99,17 @@ namespace PublisherWebAPI.Controllers
             _rep.Save();
             return NoContent();
 
+        } // end of Patch method
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var publisherToDelete = _rep.GetPublisher(id);
+            if (publisherToDelete == null) return NotFound();
+
+            _rep.DeletePublisher(publisherToDelete);
+            _rep.Save();
+            return NoContent();
         }
     }
 }

@@ -12,6 +12,8 @@ namespace PublisherWebAPI.Services
         PublisherDTO GetPublisher(int publisherId, bool includeBooks = false);
         void AddPublisher(PublisherDTO publisher);
         void UpdatePublisher(int id, PublisherUpdateDTO publisher);
+        void DeleteBook(BookDTO book);
+        void DeletePublisher(PublisherDTO publisher);
         bool PublisherExists(int publisherId);
         bool Save();
         

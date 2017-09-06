@@ -17,6 +17,25 @@ namespace PublisherWebAPI.Services
             MockData.Current.Publishers.Add(publisher);
         }
 
+        public void DeleteBook(BookDTO book)
+        {
+            MockData.Current.Books.Remove(book);
+        }
+
+        public void DeletePublisher(PublisherDTO publisher)
+        {
+            foreach (var book in publisher.Books)
+            {
+                DeleteBook(book);
+            }
+            // Alternative implementation to remove the books from a publisher
+            //MockData.Current.Books.RemoveAll(b =>
+            //    b.PublisherId.Equals(publisher));
+
+
+            MockData.Current.Publishers.Remove(publisher);
+        }
+
         public PublisherDTO GetPublisher(int publisherId, bool includeBooks = false)
         {
             var publisher = MockData.Current.Publishers.FirstOrDefault(
