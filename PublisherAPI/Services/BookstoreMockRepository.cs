@@ -36,6 +36,18 @@ namespace PublisherWebAPI.Services
             MockData.Current.Publishers.Remove(publisher);
         }
 
+        public BookDTO GetBook(int publisherId, int bookId)
+        {
+            return MockData.Current.Books.FirstOrDefault(b =>
+                b.PublisherId.Equals(publisherId) && b.Id.Equals(bookId));
+        }
+
+        public IEnumerable<BookDTO> GetBooks(int publisherId)
+        {
+            return MockData.Current.Books.Where(b =>
+                b.PublisherId.Equals(publisherId));
+        }
+
         public PublisherDTO GetPublisher(int publisherId, bool includeBooks = false)
         {
             var publisher = MockData.Current.Publishers.FirstOrDefault(

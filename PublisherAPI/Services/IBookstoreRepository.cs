@@ -16,6 +16,9 @@ namespace PublisherWebAPI.Services
         void DeletePublisher(PublisherDTO publisher);
         bool PublisherExists(int publisherId);
         bool Save();
+
+        IEnumerable<BookDTO> GetBooks(int publisherId);
+        BookDTO GetBook(int publisherId, int bookId);
         
     }
 }
