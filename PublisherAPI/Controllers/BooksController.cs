@@ -95,5 +95,15 @@ namespace PublisherWebAPI.Controllers
             _rep.Save();
             return NoContent();
         }
+
+        [HttpDelete("{publisherId}/books/{id}")]
+        public IActionResult Delete(int publisherId, int id)
+        {
+            var book = _rep.GetBook(publisherId, id);
+            if (book == null) return NotFound();
+            _rep.DeleteBook(book);
+            _rep.Save();
+            return NoContent();
+        }
     }
 }
