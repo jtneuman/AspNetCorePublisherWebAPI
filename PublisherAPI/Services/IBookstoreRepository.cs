@@ -20,6 +20,7 @@ namespace PublisherWebAPI.Services
         IEnumerable<BookDTO> GetBooks(int publisherId);
         BookDTO GetBook(int publisherId, int bookId);
         void AddBook(BookDTO book);
+        void UpdateBook(int publisherId, int id, BookUpdateDTO book);
         
     }
 }

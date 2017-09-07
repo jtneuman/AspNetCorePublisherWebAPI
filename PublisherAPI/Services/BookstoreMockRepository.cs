@@ -84,6 +84,12 @@ namespace PublisherWebAPI.Services
             return true;
         }
 
+        public void UpdateBook(int publisherId, int id, BookUpdateDTO book)
+        {
+            var bookToUpdate = GetBook(publisherId, id);
+            bookToUpdate.Title = book.Title;
+        }
+
         public void UpdatePublisher(int id, PublisherUpdateDTO publisher)
         {
             var publisherToUpdate = GetPublisher(id);
