@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PublisherWebAPI.Services;
 using PublisherWebAPI.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace PublisherWebAPI.Controllers
 {
@@ -68,7 +69,29 @@ namespace PublisherWebAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var bookToUpdate = _rep.GetBook(publisherId, id);
             if (bookToUpdate == null) return NotFound();
+            // why is this "book" and not "bookToUpdate"?
             _rep.UpdateBook(publisherId, id, book);
+            _rep.Save();
+            return NoContent();
+        }
+
+        [HttpPatch("{publisherId}/books/{id}")]
+        public IActionResult Patch(int publisherId, int id,
+            [FromBody]JsonPatchDocument<BookUpdateDTO> book)
+        {
+            if (book == null) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var bookToUpdate = _rep.GetBook(publisherId, id);
+            if (bookToUpdate == null) return NotFound();
+            var bookToPatch = new BookUpdateDTO()
+            {
+                PublisherId = bookToUpdate.PublisherId,
+                Title = bookToUpdate.Title
+            };
+            book.ApplyTo(bookToPatch, ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            // here bookToPatch is used?
+            _rep.UpdateBook(publisherId, id, bookToPatch);
             _rep.Save();
             return NoContent();
         }
