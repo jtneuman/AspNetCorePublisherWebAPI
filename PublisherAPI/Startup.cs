@@ -46,7 +46,7 @@ namespace PublisherWebAPI
 
 
             services.AddScoped(typeof(IBookstoreRepository),
-                typeof(BookstoreMockRepository));
+                typeof(BookstoreSqlRepository));
 
             AutoMapper.Mapper.Initialize(config =>
             {
