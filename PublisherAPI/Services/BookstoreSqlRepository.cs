@@ -31,52 +31,85 @@ namespace PublisherWebAPI.Services
 
         public void DeleteBook(BookDTO book)
         {
-            throw new NotImplementedException();
+            var bookToDelete = _db.Books.FirstOrDefault(b =>
+                b.Id.Equals(book.Id) && b.PublisherId.Equals(book.PublisherId));
+
+            if (bookToDelete != null) _db.Books.Remove(bookToDelete);
         }
 
         public void DeletePublisher(PublisherDTO publisher)
         {
-            throw new NotImplementedException();
+            var publisherToDelete = _db.Publishers.FirstOrDefault(p =>
+                p.Id.Equals(publisher.Id));
+            if (publisherToDelete != null)
+                _db.Publishers.Remove(publisherToDelete);
         }
 
         public BookDTO GetBook(int publisherId, int bookId)
         {
-            throw new NotImplementedException();
+            var book = _db.Books.FirstOrDefault(b =>
+                b.Id.Equals(bookId) && b.PublisherId.Equals(publisherId));
+            var bookDTO = Mapper.Map<BookDTO>(book);
+            return bookDTO;
         }
 
         public IEnumerable<BookDTO> GetBooks(int publisherId)
         {
-            throw new NotImplementedException();
+            var books = _db.Books.Where(b =>
+                b.PublisherId.Equals(publisherId));
+            var bookDTOs = Mapper.Map<IEnumerable<BookDTO>>(books);
+            return bookDTOs;
         }
 
         public PublisherDTO GetPublisher(int publisherId, bool includeBooks = false)
         {
-            throw new NotImplementedException();
+            var publisher = _db.Publishers.FirstOrDefault(p =>
+                p.Id.Equals(publisherId));
+            if (includeBooks && publisher !=null)
+            {
+                _db.Entry(publisher).Collection(c => c.Books).Load();
+            }
+
+            var publisherDTO = Mapper.Map<PublisherDTO>(publisher);
+            return publisherDTO;
         }
 
         public IEnumerable<PublisherDTO> GetPublishers()
         {
-            throw new NotImplementedException();
+            return Mapper.Map<IEnumerable<PublisherDTO>>(_db.Publishers);
         }
 
         public bool PublisherExists(int publisherId)
         {
-            throw new NotImplementedException();
+            return _db.Publishers.Count(p =>
+                p.Id.Equals(publisherId)) ==1;
         }
 
         public bool Save()
         {
-            throw new NotImplementedException();
+            return _db.SaveChanges() >=0;
         }
 
-        public void UpdateBook(int publisherId, int id, BookUpdateDTO book)
+        public void UpdateBook(int publisherId, int bookId, BookUpdateDTO book)
         {
-            throw new NotImplementedException();
+            var bookToUpdate = _db.Books.FirstOrDefault(b =>
+                b.Id.Equals(bookId) && b.PublisherId.Equals(publisherId));
+
+            if (bookToUpdate == null) return;
+
+            bookToUpdate.Title = book.Title;
+            bookToUpdate.PublisherId = book.PublisherId;
         }
 
         public void UpdatePublisher(int id, PublisherUpdateDTO publisher)
         {
-            throw new NotImplementedException();
+            var publisherToUpdate = _db.Publishers.FirstOrDefault(p =>
+                p.Id.Equals(id));
+
+            if (publisherToUpdate == null) return;
+
+            publisherToUpdate.Name = publisher.Name;
+            publisherToUpdate.Established = publisher.Established;
         }
     }
 }
