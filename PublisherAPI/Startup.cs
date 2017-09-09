@@ -44,9 +44,10 @@ namespace PublisherWebAPI
             services.AddDbContext<SqlDbContext>(options =>
                 options.UseSqlServer(conn));
 
-
             services.AddScoped(typeof(IBookstoreRepository),
                 typeof(BookstoreSqlRepository));
+            services.AddScoped(typeof(IGenericEFRepository),
+                typeof(GenericEFRepository));
 
             AutoMapper.Mapper.Initialize(config =>
             {
