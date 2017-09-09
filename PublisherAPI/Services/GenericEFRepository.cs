@@ -16,6 +16,11 @@ namespace PublisherWebAPI.Services
             _db = db;
         }
 
+        public void Add<TEntity>(TEntity item) where TEntity : class
+        {
+            _db.Add<TEntity>(item);
+        }
+
         public IEnumerable<TEntity> Get<TEntity>() where TEntity : class
         {
             return _db.Set<TEntity>();
@@ -44,6 +49,11 @@ namespace PublisherWebAPI.Services
                         _db.Entry(entity).Collection(table).Load();
             }
             return entity;
+        }
+
+        public bool Save()
+        {
+            return _db.SaveChanges() >= 0;
         }
     }
 }

@@ -37,5 +37,22 @@ namespace PublisherWebAPI.Controllers
             return Ok(DTO);
 
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]PublisherDTO DTO)
+        {
+            if (DTO == null) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var itemToCreate = Mapper.Map<Publisher>(DTO);
+            _rep.Add(itemToCreate);
+
+            if (!_rep.Save()) return StatusCode(500,
+                 "A problem occurred while handling your request.");
+
+            var createdDTO = Mapper.Map<PublisherDTO>(itemToCreate);
+
+            return CreatedAtRoute("GetGenericPublisher",
+                new { id = createdDTO.Id }, createdDTO);
+        }
     }
 }

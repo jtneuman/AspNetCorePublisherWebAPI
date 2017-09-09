@@ -9,5 +9,7 @@ namespace PublisherWebAPI.Services
     {
         IEnumerable<TEntity> Get<TEntity>() where TEntity : class;
         TEntity Get<TEntity>(int id, bool includeRelatedEntities = false) where TEntity : class;
+        void Add<TEntity>(TEntity item) where TEntity : class;
+        bool Save();
     }
 }
