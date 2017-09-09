@@ -29,5 +29,15 @@ namespace PublisherWebAPI.Controllers
             var DTOs = Mapper.Map<IEnumerable<BookDTO>>(items);
             return Ok(DTOs);
         }
+
+        [HttpGet("{publisherId}/books/{id}", Name = "GetGenericBook")]
+        public IActionResult Get(int publisherId, int id, bool includeRelatedEntities = false)
+        {
+            var item = _rep.Get<Book>(id, includeRelatedEntities);
+            if (item == null || !item.PublisherId.Equals(publisherId)) return NotFound();
+            var DTO = Mapper.Map<BookDTO>(item);
+            return Ok(DTO);
+
+        }
     }
 }
