@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,30 @@ namespace PublisherWebAPI.Controllers
             Mapper.Map(DTO, entity);
             if (!_rep.Save()) return StatusCode(500,
                 "A problem occurred while handling your request.");
+            return NoContent();
+        }
+
+        [HttpPatch("{publisherId}/books/{id}")]
+        public IActionResult Patch(int publisherId, int id,
+            [FromBody]JsonPatchDocument<BookUpdateDTO> DTO)
+        {
+            if (DTO == null) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var entity = _rep.Get<Book>(id);
+            if (entity == null) return NotFound();
+
+            var entityToPatch = Mapper.Map<BookUpdateDTO>(entity);
+            DTO.ApplyTo(entityToPatch, ModelState);
+
+            TryValidateModel(entityToPatch);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            Mapper.Map(entityToPatch, entity);
+
+            if (!_rep.Save()) return StatusCode(500,
+                "A problem occurred while handling your request.");
+
             return NoContent();
         }
     }
