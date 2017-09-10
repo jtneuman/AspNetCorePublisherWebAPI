@@ -21,6 +21,16 @@ namespace PublisherWebAPI.Services
             _db.Add<TEntity>(item);
         }
 
+        public void Delete<TEntity>(TEntity item) where TEntity : class
+        {
+            _db.Set<TEntity>().Remove(item);
+        }
+
+        public bool Exists<TEntity>(int id) where TEntity : class
+        {
+            return _db.Set<TEntity>().Find(new object[] { id }) != null;
+        }
+
         public IEnumerable<TEntity> Get<TEntity>() where TEntity : class
         {
             return _db.Set<TEntity>();
